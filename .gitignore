@@ -1,17 +1,6 @@
 # Object files
 *.o
+maildirnotify
 
-# Libraries
-*.lib
-*.a
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
+# Ignore generated C
+src/*.c
