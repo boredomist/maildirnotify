@@ -7,6 +7,9 @@ namespace MaildirNotify {
     // Check for new messages every 30 seconds.
     static const int UPDATE_SECONDS = 30;
 
+    static const string NO_UNREAD_MESSAGES = "mail-read";
+    static const string UNREAD_MESSAGES = "mail-unread";
+
     private Maildir maildir;
     private StatusIcon icon;
     private Gtk.Menu popup_menu;
@@ -32,7 +35,7 @@ namespace MaildirNotify {
 
     // Set up our systray icon and related menus / actions.
     private void build_icon() {
-      icon = new StatusIcon.from_stock(Stock.YES);
+      icon = new StatusIcon.from_icon_name(NO_UNREAD_MESSAGES);
       icon.set_tooltip_text("Updating...");
 
       var quit = new Gtk.MenuItem.with_label("Quit");
@@ -53,6 +56,7 @@ namespace MaildirNotify {
     private async void check_mail() {
       // Just quit if we don't see a new message
       if(!maildir.update()) {
+        icon.set_from_icon_name(NO_UNREAD_MESSAGES);
         icon.set_tooltip_text("No new messages.");
         return;
       }
@@ -64,6 +68,7 @@ namespace MaildirNotify {
         num_new += msgs.size;
       }
 
+      icon.set_from_icon_name(UNREAD_MESSAGES);
       icon.set_tooltip_text(@"$num_new new emails.");
     }
   }
