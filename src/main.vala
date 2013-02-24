@@ -7,16 +7,16 @@ namespace MaildirNotify {
 
     private static const string VERSION = "0.0.0";
 
-    private static bool version;
-    private static string? maildir = "~/Maildir";
+    private static bool version = false;
+    private static string? path_maildir = null;
     [CCode (array_length = false, array_null_terminated = true)]
-    private static string[]? folders = {"INBOX", null};
+    private static string[]? folders = null;
 
     private const GLib.OptionEntry[] options = {
       { "version", 'v', 0, OptionArg.NONE, ref version, "Display version number",
         null },
 
-      { "maildir", 'm', 0, OptionArg.FILENAME, ref maildir,
+      { "maildir", 'm', 0, OptionArg.FILENAME, ref path_maildir,
         "Path to maildir, defaults to ~/Maildir", "DIRECTORY" },
 
       { "folders", 'f', 0, OptionArg.FILENAME_ARRAY, ref folders,
@@ -46,9 +46,24 @@ namespace MaildirNotify {
 
       Gtk.init(ref args);
 
+      if(path_maildir == null) {
+        path_maildir = "~/Mail";
+      }
+
+      if(folders == null) {
+        folders = { "INBOX", null };
+      }
+
+      var maildir = new Maildir(path_maildir, folders);
+
+      if(!maildir.valid) {
+        stdout.printf("Bailing out, try harder next time.\n");
+        return 1;
+      }
+
       // Explicitly reference the TrayIcon here, so garbage collector doesn't
       // eat it instantly.
-      new TrayIcon("~/Maildir", {"asdf", null}).ref();
+      new TrayIcon(maildir).ref();
 
       Gtk.main();
 

@@ -11,9 +11,9 @@ namespace MaildirNotify {
     private StatusIcon icon;
     private Gtk.Menu popup_menu;
 
-    public TrayIcon(string dir, string[] folders) {
+    public TrayIcon(Maildir maildir) {
+      this.maildir = maildir;
 
-      maildir = new Maildir(dir, folders);
       popup_menu = new Gtk.Menu();
 
       build_icon();
@@ -25,6 +25,9 @@ namespace MaildirNotify {
       });
 
       icon.set_visible(true);
+
+      // Let's do an intial update
+      check_mail.begin();
     }
 
     // Set up our systray icon and related menus / actions.
