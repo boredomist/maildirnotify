@@ -12,11 +12,14 @@ namespace MaildirNotify {
       Regex header = null;
 
       try {
-        header = new Regex("^(?P<name>.*):(?P<value>.*)$");
+        header = new Regex("^(?P<name>.*?):(?P<value>.*)$");
       } catch(RegexError re) {
         assert_not_reached();
       }
 
+      date = "No time";
+      from = "No sender";
+      subject = "No subject.";
 
       var stream = FileStream.open(path, "r");
       assert(stream != null);
@@ -32,13 +35,13 @@ namespace MaildirNotify {
 
           switch(name) {
           case "subject":
-            this.subject = value;
+            this.subject = value.strip();
             break;
           case "from":
-            this.from = value;
+            this.from = value.strip();
             break;
           case "date":
-            this.date = value;
+            this.date = value.strip();
             break;
           }
         }

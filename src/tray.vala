@@ -62,14 +62,35 @@ namespace MaildirNotify {
       }
 
       int num_new = 0;
-
+      string tooltip = "";
       foreach(var mailbox in maildir) {
-        var msgs = mailbox.messages;
-        num_new += msgs.size;
+        var new_messages = mailbox.messages.size;
+        if(new_messages != 0) {
+          tooltip += @"\n$(mailbox.name):\t$(new_messages) new";
+
+          foreach(var msg in mailbox.messages) {
+            // Truncate the subjects and senders to a somewhat sensible size
+            // TODO: Shorter sender names will probably break the tab alignment.
+            //       Should really use Pango here. But escaping. Effort. Meh.
+            var from = msg.from;
+            if(from.length > 25) {
+              from = from.substring(0, 21) + "...";
+            }
+
+            var subject = msg.subject;
+            if(subject.length > 25) {
+              subject = subject.substring(0, 21) + "...";
+            }
+
+            tooltip += @"\n  $(from)\t$(subject)";
+          }
+        }
+
+        num_new += new_messages;
       }
 
       icon.set_from_icon_name(UNREAD_MESSAGES);
-      icon.set_tooltip_text(@"$num_new new emails.");
+      icon.set_tooltip_text(@"$num_new new emails.$tooltip");
     }
   }
 }
