@@ -39,15 +39,16 @@ namespace MaildirNotify {
 
       } catch (OptionError e) {
         stderr.printf("error: %s\n", e.message);
-        stderr.printf("Run '%s --help' to see a full list of available command line options.\n",
-                      args[0]);
+        stderr.printf("Run '%s --help' to see a full list of available command " +
+                      "line options.\n", args[0]);
         return 1;
       }
 
       Gtk.init(ref args);
 
-      var tray = new TrayIcon("~/Maildir", {"asdf", null});
-      tray.update();
+      // Explicitly reference the TrayIcon here, so garbage collector doesn't
+      // eat it instantly.
+      new TrayIcon("~/Maildir", {"asdf", null}).ref();
 
       Gtk.main();
 
