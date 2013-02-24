@@ -20,7 +20,8 @@ namespace MaildirNotify {
         "Path to maildir, defaults to ~/Maildir", "DIRECTORY" },
 
       { "folders", 'f', 0, OptionArg.FILENAME_ARRAY, ref folders,
-        "List of folders names to watch, defaults to INBOX", "FOLDER..."},
+        "Folders names to watch, defaults to INBOX. Use multiple flags for " +
+        "multiple folders", "FOLDER..."},
 
       { null }
     };
