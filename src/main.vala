@@ -5,7 +5,7 @@ namespace MaildirNotify {
 
   public class Main : Object {
 
-    private static const string VERSION = "0.0.0";
+    private static const string VERSION = "0.1.0";
 
     private static bool version = false;
     private static string? path_maildir = null;
